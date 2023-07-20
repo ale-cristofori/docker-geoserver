@@ -28,14 +28,21 @@ services:
       dockerfile: ./Dockerfile
       args:
         GEOSERVER_WEBAPP_SRC: "https://build.geoserver.org/geoserver/main/geoserver-main-latest-war.zip"
-        PLUG_IN_URLS: "https://build.geoserver.org/geoserver/main/ext-latest/geoserver-2.24-SNAPSHOT-css-plugin.zip https://build.geoserver.org/geoserver/main/ext-latest/geoserver-2.24-SNAPSHOT-monitor-plugin.zip https://build.geoserver.org/geoserver/main/ext-latest/geoserver-2.24-SNAPSHOT-pyramid-plugin.zip"
+        PLUG_IN_URLS: ​"https://build.geoserver.org/geoserver/main/ext-latest/geoserver-2.24-SNAPSHOT-css-plugin.zip https://build.geoserver.org/geoserver/main/ext-latest/geoserver-2.24-SNAPSHOT-monitor-plugin.zip https://build.geoserver.org/geoserver/main/ext-latest/geoserver-2.24-SNAPSHOT-pyramid-plugin.zip"
+    environment:
+      - GEOSERVER_LOG_DIR=$${GEOSERVER_LOG_DIR:-/var/geoserver/logs}
+      - GEOSERVER_DATA_DIR=$${GEOSERVER_DATA_DIR:-/var/geoserver/datadir}
+      - GEOWEBCACHE_CONFIG_DIR=$${GEOWEBCACHE_CONFIG_DIR:-/var/geoserver/datadir/gwc}
+      - GEOWEBCACHE_CACHE_DIR=$${GEOWEBCACHE_CACHE_DIR:-/var/geoserver/gwc_cache_dir}
+      - NETCDF_DATA_DIR=$${NETCDF_DATA_DIR:-/var/geoserver/netcdf_data_dir}
+      - GRIB_CACHE_DIR=$${GRIB_CACHE_DIR:-/var/geoserver/grib_cache_dir}
     volumes:
-      - logs:/var/geoserver/logs
-      - datadir:/var/geoserver/datadir
-      - gwc_config:/var/geoserver/datadir/gwc
-      - gwc:/var/geoserver/gwc_cache_dir
-      - netcfd:/var/geoserver/netcdf_data_dir
-      - grib_cache:/var/geoserver/grib_cache_dir
+      - logs=$${GEOSERVER_LOG_DIR}
+      - datadir=$${GEOSERVER_DATA_DIR}
+      - gwc_config=$${GEOWEBCACHE_CONFIG_DIR}
+      - gwc=$${GEOWEBCACHE_CACHE_DIR}
+      - netcfd=$${NETCDF_DATA_DIR}
+      - grib_cache=$${GRIB_CACHE_DIR}
     container_name: geoserver
     depends_on:
       postgres:
